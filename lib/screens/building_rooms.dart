@@ -22,9 +22,9 @@ class BuildingRoom extends StatelessWidget {
   Widget _buildListView() {
     return Consumer<BuildingManager>(
       builder: (context, manager, child) {
-        Map<String, bool> rooms = manager.buildings[building];
+        Map<String, RoomState> rooms = manager.buildings[building];
         List<String> roomNames = rooms.keys.toList();
-        List<bool> roomStatus = rooms.values.toList();
+        List<RoomState> roomStatus = rooms.values.toList();
         return ListView.separated(
             itemCount: rooms.length,
             padding: EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 8.0),
@@ -43,9 +43,9 @@ class RoomItem extends StatefulWidget {
 
   final String _building;
   final String _roomName;
-  final bool _roomChecked;
+  final RoomState _roomState;
 
-  RoomItem(this._building, this._roomName, this._roomChecked);
+  RoomItem(this._building, this._roomName, this._roomState);
 
   @override
   _RoomItemState createState() => _RoomItemState();
@@ -80,17 +80,27 @@ class _RoomItemState extends State<RoomItem> {
         style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
       ),
       trailing: Container(
-        width: 48.0,
+        width: 64.0,
         child: LinearPercentIndicator(
           animation: true,
           animateFromLastPercent: true,
           animationDuration: 800,
-          progressColor: widget._roomChecked ? Colors.green[500] : Colors
-              .red[500],
+          progressColor: _getColor(widget._roomState),
           linearStrokeCap: LinearStrokeCap.roundAll,
           percent: 1.0,
         ),
       ),
     );
+  }
+
+  Color _getColor(RoomState state) {
+    switch (state) {
+      case RoomState.checked:
+        return Colors.green[500];
+      case RoomState.warning:
+        return Colors.yellow[500];
+      case RoomState.error:
+        return Colors.red[500];
+    }
   }
 }

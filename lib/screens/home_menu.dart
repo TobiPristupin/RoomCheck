@@ -20,7 +20,7 @@ class HomeMenu extends StatelessWidget {
   Widget _buildGridView() {
     return Consumer<BuildingManager>(
         builder: (context, manager, child) {
-          Map<String, Map<String, bool>> buildings = manager.buildings;
+          Map<String, Map<String, RoomState>> buildings = manager.buildings;
           List<MenuOption> widgets = [];
           buildings.forEach((key, value) {
             widgets.add(MenuOption(key));
@@ -85,9 +85,9 @@ class _MenuOptionState extends State<MenuOption> {
   Widget _buildPercentIndicator(BuildContext context) {
     return Consumer<BuildingManager>(
       builder: (context, manager, child) {
-        Map<String, bool> rooms = manager.buildings[widget._building];
+        Map<String, RoomState> rooms = manager.buildings[widget._building];
         int checked = rooms.values
-            .where((x) => x == true)
+            .where((x) => x == RoomState.checked)
             .length;
         double percent = checked / rooms.length;
         return LinearPercentIndicator(
