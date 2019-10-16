@@ -8,12 +8,13 @@ import 'package:room_check/theme.dart';
 
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final FirebaseApp firebaseApp = await FirebaseApp.configure(
     name: "RoomCheck",
     options: const FirebaseOptions(
-        googleAppID: "1:1013874661870:android:24205163941bdaa956d6ff",
-        apiKey: "AIzaSyBA6OK0BNkHO8cRAbsoYmibDVJV82xwbqE",
-        databaseURL: "https://room-check-7f56b.firebaseio.com"
+        googleAppID: "1:1013874661870:android:24205163941bdaa956d6f",
+        apiKey: "AIzaSyBA6OK0BNkHO8cRAbsoYmibDVJV82xwbq",
+        databaseURL: "https://room-check-7f56b.firebaseio.co"
     ),
   );
 

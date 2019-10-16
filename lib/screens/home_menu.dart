@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:room_check/managers/building_manager.dart';
+import 'package:room_check/model/building.dart';
 import 'package:room_check/screens/building_rooms.dart';
 
 
@@ -20,7 +21,7 @@ class HomeMenu extends StatelessWidget {
   Widget _buildGridView() {
     return Consumer<BuildingManager>(
         builder: (context, manager, child) {
-          Map<String, Map<String, RoomState>> buildings = manager.buildings;
+          Map<String, Map<String, Room>> buildings = manager.buildings;
           List<MenuOption> widgets = [];
           buildings.forEach((key, value) {
             widgets.add(MenuOption(key));
@@ -85,9 +86,9 @@ class _MenuOptionState extends State<MenuOption> {
   Widget _buildPercentIndicator(BuildContext context) {
     return Consumer<BuildingManager>(
       builder: (context, manager, child) {
-        Map<String, RoomState> rooms = manager.buildings[widget._building];
+        Map<String, Room> rooms = manager.buildings[widget._building];
         int checked = rooms.values
-            .where((x) => x == RoomState.checked)
+            .where((x) => x.checked)
             .length;
         double percent = checked / rooms.length;
         return LinearPercentIndicator(
