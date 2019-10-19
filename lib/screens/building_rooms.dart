@@ -16,11 +16,11 @@ class BuildingRoom extends StatelessWidget {
       appBar: AppBar(
         title: Text(building),
       ),
-      body: Container(child: _buildListView()),
+      body: Container(child: _getListView()),
     );
   }
 
-  Widget _buildListView() {
+  Widget _getListView() {
     return Consumer<BuildingManager>(
       builder: (context, manager, child) {
         Map<String, Room> rooms = manager.buildings[building];
@@ -59,32 +59,57 @@ class RoomItem extends StatelessWidget {
       child: InkWell(
         onTap: () => this._onTap(context),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: _buildListTile(),
+          padding: const EdgeInsets.all(4.0),
+          child: _getListTile(context),
         ),
       ),
     );
   }
 
   void _onTap(BuildContext context){
-    _room.checked = !_room.checked;
-    Provider.of<BuildingManager>(context).updateRoom(_building, _room);
+    print("pressed");
   }
 
-  Widget _buildListTile() {
+  Widget _getListTile(BuildContext context) {
     return ListTile(
-      title: Text(
-        _roomName,
-        style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-      ),
-      trailing: Container(
-        width: 64.0,
-        child: _buildCheckedIndicator(),
+      title: _getMainText(),
+      subtitle: _getSubtitleText(),
+      trailing: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            width: 64.0,
+            child: _getCheckedIndicator(),
+          ),
+          IconButton(
+            icon: Icon(Icons.keyboard_arrow_right),
+            iconSize: 28.0,
+            onPressed: () => _onTap(context),
+          )
+        ],
       ),
     );
   }
 
-  Widget _buildCheckedIndicator(){
+  Widget _getMainText(){
+    return Text(
+      _roomName,
+      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+    );
+  }
+
+  Widget _getSubtitleText(){
+    int boolToInt(bool x){
+      return x ? 1 : 0;
+    }
+
+    int errors = boolToInt(_room.powerCords) + boolToInt(_room.computers) + boolToInt(_room.dividers) + boolToInt(_room.hasErrorMessage);
+    return Text("Errors: $errors");
+  }
+
+
+  Widget _getCheckedIndicator(){
     return LinearPercentIndicator(
       animation: true,
       animateFromLastPercent: true,

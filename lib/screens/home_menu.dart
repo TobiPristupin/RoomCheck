@@ -14,11 +14,11 @@ class HomeMenu extends StatelessWidget {
       appBar: AppBar(
         title: Text("Room Checker"),
       ),
-      body: Container(child: _buildGridView()),
+      body: Container(child: _getGridView()),
     );
   }
 
-  Widget _buildGridView() {
+  Widget _getGridView() {
     return Consumer<BuildingManager>(
         builder: (context, manager, child) {
           Map<String, Map<String, Room>> buildings = manager.buildings;
@@ -55,8 +55,8 @@ class MenuOption extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _buildCardText(),
-            _buildPercentIndicator(context),
+            _getCardText(),
+            _getPercentIndicator(context),
           ],
         ),
       ),
@@ -72,14 +72,14 @@ class MenuOption extends StatelessWidget {
     );
   }
 
-  Widget _buildCardText() {
+  Widget _getCardText() {
     return Text(
       _building,
       style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
     );
   }
 
-  Widget _buildPercentIndicator(BuildContext context) {
+  Widget _getPercentIndicator(BuildContext context) {
     return Consumer<BuildingManager>(
       builder: (context, manager, child) {
         double percent = _getPercentCheckedRooms(manager);
