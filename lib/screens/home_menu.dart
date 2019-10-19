@@ -27,7 +27,6 @@ class HomeMenu extends StatelessWidget {
             widgets.add(MenuOption(key));
           });
 
-
           return GridView.count(
             crossAxisCount: 2,
             padding: EdgeInsets.all((16.0)),
@@ -38,16 +37,11 @@ class HomeMenu extends StatelessWidget {
   }
 }
 
-class MenuOption extends StatefulWidget {
+class MenuOption extends StatelessWidget {
+
   final String _building;
 
   MenuOption(this._building);
-
-  @override
-  _MenuOptionState createState() => _MenuOptionState();
-}
-
-class _MenuOptionState extends State<MenuOption> {
 
   @override
   Widget build(BuildContext context) {
@@ -57,14 +51,7 @@ class _MenuOptionState extends State<MenuOption> {
         borderRadius: BorderRadius.circular(6.0),
       ),
       child: InkWell(
-        onTap: () {
-          Navigator.push(context,
-              //TODO: checkout named navigation with arguments
-              MaterialPageRoute(builder: (context) {
-                return BuildingRoom(building: widget._building,);
-              })
-          );
-        },
+        onTap: () => this._onTap(context),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
@@ -76,9 +63,18 @@ class _MenuOptionState extends State<MenuOption> {
     );
   }
 
+  void _onTap(BuildContext context){
+    Navigator.push(context,
+      //TODO: checkout named navigation with arguments
+      MaterialPageRoute(builder: (context) {
+        return BuildingRoom(building: _building,);
+      })
+    );
+  }
+
   Widget _buildCardText() {
     return Text(
-      widget._building,
+      _building,
       style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
     );
   }
@@ -86,11 +82,7 @@ class _MenuOptionState extends State<MenuOption> {
   Widget _buildPercentIndicator(BuildContext context) {
     return Consumer<BuildingManager>(
       builder: (context, manager, child) {
-        Map<String, Room> rooms = manager.buildings[widget._building];
-        int checked = rooms.values
-            .where((x) => x.checked)
-            .length;
-        double percent = checked / rooms.length;
+        double percent = _getPercentCheckedRooms(manager);
         return LinearPercentIndicator(
           padding: EdgeInsets.symmetric(horizontal: 32.0),
           animation: true,
@@ -104,6 +96,14 @@ class _MenuOptionState extends State<MenuOption> {
     );
   }
 
+  double _getPercentCheckedRooms(BuildingManager manager){
+    Map<String, Room> rooms = manager.buildings[_building];
+    int checked = rooms.values
+      .where((x) => x.checked)
+      .length;
+    return checked / rooms.length;
+  }
+
   Color _getColor(double percent) {
     if (percent == 1) {
       return Colors.green[500];
@@ -114,3 +114,4 @@ class _MenuOptionState extends State<MenuOption> {
     }
   }
 }
+
